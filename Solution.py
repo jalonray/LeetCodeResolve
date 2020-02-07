@@ -1037,4 +1037,75 @@ class Solution:
         combinationSumRecursive(sorted(candidates), target, [], result)
         return result
 
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        """https://leetcode-cn.com/problems/first-missing-positive/"""
+        n = len(nums)
+        if n == 0:
+            return 1
+        has_one = False
+        for i in range(n):
+            if not has_one and nums[i] == 1:
+                has_one = True
+            elif nums[i] <= 0 or nums[i] > n:
+                nums[i] = 1
+
+        if not has_one:
+            return 1
+        for i in range(n):
+            if nums[i] < 0:
+                idx = -nums[i] - 1
+            else:
+                idx = nums[i] - 1
+            if nums[idx] > 0:
+                nums[idx] = -nums[idx]
+        for i in range(n):
+            if nums[i] > 0:
+                return i + 1
+        return n + 1
+
+    def multiply(self, num1: str, num2: str) -> str:
+        """https://leetcode-cn.com/problems/multiply-strings/"""
+        if num1 == "0" or num2 == "0":
+            return "0"
+        if num1 == "1":
+            return num2
+        if num2 == "1":
+            return num1
+
+        m, n = len(num1), len(num2)
+        result = [0 for _ in range(m + n)]
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+                x, y = ord(num1[i]) - ord('0'), ord(num2[j]) - ord('0')
+                result[i + j + 1] += x * y
+
+        for i in range(m + n - 1, 0, -1):
+            carry = result[i] // 10
+            result[i] = result[i] % 10
+            result[i - 1] += carry
+
+        return ''.join([str(x) for x in result]).lstrip('0')
+
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/permutations/"""
+        ans = []
+        res = []
+
+        def premute_in(ans_in: List[List[int]], res_in: List[int], nums_in: List[int]):
+            n = len(nums_in)
+            if n == 0:
+                return
+            if n == 1:
+                res_in.append(nums_in[0])
+                ans_in.append(res_in.copy())
+                del res_in[len(res_in) - 1]
+                return
+            for i in range(n):
+                res_in.append(nums_in[i])
+                premute_in(ans_in, res_in, nums_in[0: i] + nums_in[i + 1: n])
+                del res_in[len(res_in) - 1]
+
+        premute_in(ans, res, nums)
+        return ans
+
 

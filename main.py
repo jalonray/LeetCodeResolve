@@ -1,3 +1,5 @@
+import time
+
 from Solution import Solution
 
 if __name__ == '__main__':
@@ -93,4 +95,7 @@ if __name__ == '__main__':
     #                               [".", ".", ".", ".", "8", ".", ".", "7", "9"]]))
     # print(solution.countAndSay(7))
     # print(solution.combinationSum([10,1,2,7,6,1,5], 8))
-    print(solution.combinationSum2([10,1,2,7,6,1,5], 8))
+    # print(solution.combinationSum2([10,1,2,7,6,1,5], 8))
+    # print(solution.firstMissingPositive([1,8,3,11,12]))
+    # print(solution.multiply("999","999"))
+    print(solution.permute([1]))
