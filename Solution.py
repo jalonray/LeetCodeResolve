@@ -1,11 +1,11 @@
 import bisect
-from queue import Queue
+import collections
 from typing import List
 
 
 class ListNode:
 
-    def __init__(self, x, nextNode = None):
+    def __init__(self, x, nextNode=None):
         self.val = x
         self.next = nextNode
 
@@ -356,7 +356,7 @@ class Solution:
         max = []
         for i in range(n):
             max = max + [len(nums_map[digits[i]])]
-        temp = "#"*n
+        temp = "#" * n
         top = 0
         while top >= 0:
             if top >= n:
@@ -547,7 +547,8 @@ class Solution:
         #     right.put(temp_r)
         # return result
         ans = []
-        def backtrack(s='', left = 0, right = 0):
+
+        def backtrack(s='', left=0, right=0):
             if len(s) == 2 * n:
                 ans.append(s)
                 return
@@ -555,6 +556,7 @@ class Solution:
                 backtrack(s + '(', left + 1, right)
             if left > right:
                 backtrack(s + ')', left, right + 1)
+
         backtrack()
         return ans
 
@@ -871,7 +873,7 @@ class Solution:
     def searchRange(self, nums: List[int], target: int) -> List[int]:
         """https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/"""
 
-        def binary_search_left(nums_left:List[int], target_left: int) -> int:
+        def binary_search_left(nums_left: List[int], target_left: int) -> int:
             l_left = 0
             r_left = len(nums_left) - 1
             result_left = -1
@@ -887,7 +889,7 @@ class Solution:
                     l_left = middle_left + 1
             return result_left
 
-        def binary_search_right(nums_right:List[int], target_right: int) -> int:
+        def binary_search_right(nums_right: List[int], target_right: int) -> int:
             l_right = 0
             result_right = -1
             r_right = len(nums_right) - 1
@@ -985,7 +987,8 @@ class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         """https://leetcode-cn.com/problems/combination-sum/"""
 
-        def combinationSumRecursive(candidates_in: List[int], target_in: int, current_result: List[int], result: List[List[int]]):
+        def combinationSumRecursive(candidates_in: List[int], target_in: int, current_result: List[int],
+                                    result: List[List[int]]):
             n = len(candidates_in)
             for i in range(n):
                 current = candidates_in[i]
@@ -1009,7 +1012,8 @@ class Solution:
     def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
         """https://leetcode-cn.com/problems/combination-sum-ii/"""
 
-        def combinationSumRecursive(candidates_in: List[int], target_in: int, current_result: List[int], result: List[List[int]]):
+        def combinationSumRecursive(candidates_in: List[int], target_in: int, current_result: List[int],
+                                    result: List[List[int]]):
             n = len(candidates_in)
             i = 0
             while i < n:
@@ -1108,4 +1112,66 @@ class Solution:
         premute_in(ans, res, nums)
         return ans
 
+    def permuteUnique(self, nums: List[int]) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/permutations-ii/"""
+        ans = []
+        res = []
 
+        def premute_in(ans_in: List[List[int]], res_in: List[int], nums_in: List[int]):
+            n = len(nums_in)
+            if n == 0:
+                return
+            if n == 1:
+                res_in.append(nums_in[0])
+                ans_in.append(res_in.copy())
+                del res_in[len(res_in) - 1]
+                return
+            i = 0
+            while i < n:
+                res_in.append(nums_in[i])
+                premute_in(ans_in, res_in, nums_in[0: i] + nums_in[i + 1: n])
+                del res_in[len(res_in) - 1]
+                while i < n - 1 and nums_in[i] == nums_in[i + 1]:
+                    i += 1
+                i += 1
+
+        nums = sorted(nums)
+        premute_in(ans, res, nums)
+        return ans
+
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """https://leetcode-cn.com/problems/rotate-image/"""
+        n = len(matrix)
+        for i in range(n // 2 + n % 2):
+            for j in range(n // 2):
+                tmp = matrix[n - 1 - j][i]
+                matrix[n - 1 - j][i] = matrix[n - 1 - i][n - j - 1]
+                matrix[n - 1 - i][n - j - 1] = matrix[j][n - 1 - i]
+                matrix[j][n - 1 - i] = matrix[i][j]
+                matrix[i][j] = tmp
+
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        """https://leetcode-cn.com/problems/group-anagrams/"""
+        # map_list = []
+        # res_list = []
+        # for i in range(len(strs)):
+        #     item_map = {}
+        #     for j in range(len(strs[i])):
+        #         item = strs[i][j]
+        #         if item in item_map.keys():
+        #             item_map[item] += 1
+        #         else:
+        #             item_map[item] = 1
+        #     if item_map in map_list:
+        #         res_list[map_list.index(item_map)].append(strs[i])
+        #     else:
+        #         map_list.append(item_map)
+        #         res_list.append([strs[i]])
+        # return res_list
+        res = []
+        ans = collections.defaultdict(list)
+        for s in strs:
+            ans[tuple(sorted(s))].append(s)
+        for i in ans.values():
+            res.append(i)
+        return res
