@@ -1214,7 +1214,22 @@ class Solution:
 
         return (max_of_left + min_of_right) / 2
 
+    def maxSubArray(self, nums: List[int]) -> int:
+        """https://leetcode-cn.com/problems/maximum-subarray/"""
+        ans = nums[0]
+        for i in range(1, len(nums)):
+            if nums[i - 1] > 0:
+                nums[i] += nums[i - 1]
+            ans = max(nums[i], ans)
+        return ans
 
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        """https://leetcode-cn.com/problems/spiral-matrix/"""
+        res = []
+        while matrix:
+            res += matrix.pop(0)
+            matrix = list(map(list, zip(*matrix)))[::-1]
+        return res
 
 
 

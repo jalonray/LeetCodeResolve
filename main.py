@@ -101,4 +101,5 @@ if __name__ == '__main__':
     # print(solution.permute([1]))
     # print(solution.permuteUnique([1, 1, 2, 2]))
     # print(solution.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
-    print(solution.findMedianSortedArrays([1, 2, 5], [3, 4]))
+    # print(solution.findMedianSortedArrays([1, 2, 5], [3, 4]))
+    print(solution.spiralOrder([[1, 2, 3, 4],[5, 6, 7, 8],[9,10,11,12]]))
