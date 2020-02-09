@@ -100,4 +100,5 @@ if __name__ == '__main__':
     # print(solution.multiply("999","999"))
     # print(solution.permute([1]))
     # print(solution.permuteUnique([1, 1, 2, 2]))
-    print(solution.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
+    # print(solution.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
+    print(solution.findMedianSortedArrays([1, 2, 5], [3, 4]))
