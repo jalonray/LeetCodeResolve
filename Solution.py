@@ -1231,5 +1231,310 @@ class Solution:
             matrix = list(map(list, zip(*matrix)))[::-1]
         return res
 
+    def canJump(self, nums: List[int]) -> bool:
+        """https://leetcode-cn.com/problems/jump-game/"""
+        max_n = len(nums) - 1
+        for i in range(max_n, -1, -1):
+            if i + nums[i] >= max_n:
+                max_n = i
+        return max_n == 0
+
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/merge-intervals/"""
+        intervals = sorted(intervals)
+        last = None
+        ans = []
+        for i in range(len(intervals)):
+            if not last:
+                last = intervals[i]
+                continue
+            if last[1] >= intervals[i][0]:
+                last[1] = intervals[i][1]
+            else:
+                ans.append(last)
+                last = intervals[i]
+        if not last:
+            ans.append(last)
+        return ans
+
+    def lengthOfLastWord(self, s: str) -> int:
+        """https://leetcode-cn.com/problems/length-of-last-word/"""
+        splited = s.split(' ')
+        n = len(splited)
+        i = 0
+        ans = 0
+        while i < n:
+            if splited[i] == '':
+                del splited[i]
+                n = n - 1
+                continue
+            ans = len(splited[i])
+            i = i + 1
+        return ans
+
+    def generateMatrix(self, n: int) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/spiral-matrix-ii/"""
+        matrix, i, j, di, dj = [], 0, 0, 0, 1
+        if n == 0:
+            return matrix
+        matrix = [[0 for _ in range(n)] for _ in range(n)]
+        for num in range(1, n ** 2 + 1):
+            matrix[i][j] = num
+            if i + di >= n or i + di < 0 or j + dj >= n or j + dj < 0 or matrix[i + di][j + dj] != 0:
+                di, dj = dj, -di
+            i += di
+            j += dj
+        return matrix
+
+    def getPermutation(self, n: int, k: int) -> str:
+        """https://leetcode-cn.com/problems/permutation-sequence/"""
+        num = 1
+        ans = ""
+        nums = []
+        for i in range(n):
+            num *= i + 1
+            nums.append(str(i + 1))
+        for i in range(n, 0, -1):
+            num /= i
+            index = int(k // num) - 1
+            k = k % num
+            if k > 0:
+                index += 1
+            ans += nums[index]
+            del nums[index]
+        return ans
+
+    def rotateRight(self, head: ListNode, k: int) -> ListNode:
+        """https://leetcode-cn.com/problems/rotate-list/"""
+        if not head:
+            return head
+        temp = head
+        n = 0
+        while temp.next is not None:
+            n += 1
+            temp = temp.next
+        n += 1
+        tail = temp
+        k %= n
+        temp = head
+        pre = head
+        count = 0
+        while temp.next is not None:
+            if count < k:
+                count += 1
+            else:
+                pre = pre.next
+            temp = temp.next
+        tail.next = head
+        head = pre.next
+        pre.next = None
+        return head
+
+    def uniquePaths(self, m: int, n: int) -> int:
+        """https://leetcode-cn.com/problems/unique-paths/"""
+        if m > n:
+            m, n = n, m
+        ans = [[0 for _ in range(m)] for _ in range(n)]
+        for i in range(n):
+            for j in range(m):
+                if ans[i][j] != 0:
+                    continue
+                if i == 0 or j == 0:
+                    ans[i][j] = 1
+                else:
+                    item = ans[i][j - 1] + ans[i - 1][j]
+                    ans[i][j] = item
+                    if i != j and i < m and j < n:
+                        ans[j][i] = item
+        return ans[n - 1][m - 1]
+
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        """https://leetcode-cn.com/problems/unique-paths-ii/"""
+        ans = obstacleGrid
+        if ans[0][0] == 1:
+            return 0
+        m, n = len(ans[0]), len(ans)
+        for i in range(n):
+            for j in range(m):
+                if ans[i][j] == 1:
+                    ans[i][j] = None
+        for i in range(n - 1, -1, -1):
+            for j in range(m - 1, -1, -1):
+                if ans[i][j] != 0:
+                    continue
+                if i == n - 1 and j == m - 1:
+                    if ans[i][j] is not None:
+                        ans[i][j] = 1
+                elif i == n - 1 and ans[i][j + 1] is not None:
+                    ans[i][j] = 1
+                elif i == n - 1 and ans[i][j + 1] is None:
+                    ans[i][j] = None
+                elif j == m - 1 and ans[i + 1][j] is not None:
+                    ans[i][j] = 1
+                elif j == m - 1 and ans[i + 1][j] is None:
+                    ans[i][j] = None
+                else:
+                    if ans[i][j + 1] is not None and ans[i + 1][j] is not None:
+                        item = ans[i][j + 1] + ans[i + 1][j]
+                    elif ans[i][j + 1] is not None:
+                        item = ans[i][j + 1]
+                    elif ans[i + 1][j] is not None:
+                        item = ans[i + 1][j]
+                    else:
+                        item = None
+                    ans[i][j] = item
+        if ans[0][0] is not None:
+            return ans[0][0]
+        else:
+            return 0
+
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        """https://leetcode-cn.com/problems/minimum-path-sum/"""
+        n, m = len(grid), len(grid[0])
+        for i in range(n):
+            for j in range(m):
+                if i == 0 and j == 0:
+                    continue
+                if i == 0:
+                    grid[i][j] += grid[i][j - 1]
+                elif j == 0:
+                    grid[i][j] += grid[i - 1][j]
+                else:
+                    grid[i][j] += min(grid[i - 1][j], grid[i][j - 1])
+        return grid[n - 1][m - 1]
+
+    def plusOne(self, digits: List[int]) -> List[int]:
+        """https://leetcode-cn.com/problems/plus-one/"""
+        n = len(digits)
+        i = n - 1
+        digits[i] += 1
+        ten = 0
+        while i >= 0:
+            ten = digits[i] // 10
+            digits[i] %= 10
+            if ten < 1:
+                break
+            if i > 0:
+                digits[i - 1] += ten
+            i = i - 1
+        if ten != 0:
+            digits = [ten] + digits
+        return digits
+
+    def addBinary(self, a: str, b: str) -> str:
+        """https://leetcode-cn.com/problems/add-binary/"""
+
+        def add(add_list: List[str]) -> (str, str):
+            add_one_count = 0
+            for add_i in range(len(add_list)):
+                if add_list[add_i] == '1':
+                    add_one_count += 1
+            if add_one_count == 0:
+                add_ten = '0'
+                add_one = '0'
+            elif add_one_count == 1:
+                add_ten = '0'
+                add_one = '1'
+            elif add_one_count == 2:
+                add_ten = '1'
+                add_one = '0'
+            else:
+                add_ten = '1'
+                add_one = '1'
+            return add_ten, add_one
+
+        n, m = len(a), len(b)
+        ans, i, j, pre = '', n - 1, m - 1, '0'
+        while i >= 0 or j >= 0:
+            if i >= 0 and j >= 0:
+                pre, one = add([a[i], b[j], pre])
+                ans = one + ans
+            elif i >= 0:
+                pre, one = add([a[i], pre])
+                ans = one + ans
+            else:
+                pre, one = add([b[j], pre])
+                ans = one + ans
+            i -= 1
+            j -= 1
+        if pre == '1':
+            ans = pre + ans
+        return ans
+
+    def mySqrt(self, x: int) -> int:
+        """https://leetcode-cn.com/problems/sqrtx/"""
+        import math
+        from math import log
+        left = int(math.e ** (0.5 * log(x)))
+        right = left + 1
+        return left if right * right > x else right
+
+    def climbStairs(self, n: int) -> int:
+        """https://leetcode-cn.com/problems/climbing-stairs/"""
+        # if n == 1:
+        #     return 1
+        # if n == 2:
+        #     return 2
+        # ans = [1 for _ in range(n)]
+        # ans[2] = 2
+        # for i in range(2, n):
+        #     ans[i] = ans[i - 1] + ans[i - 2]
+        # return ans[n - 1]
+        from math import sqrt
+        s5 = sqrt(5)
+        return int(1 / s5 * (((1 + s5) / 2) ** (n + 1) - ((1 - s5) / 2) ** (n + 1)))
+
+    def simplifyPath(self, path: str) -> str:
+        """https://leetcode-cn.com/problems/simplify-path/"""
+        path_list = path.split('/')
+        ans = []
+        for i in range(len(path_list)):
+            if path_list[i] == '' or path_list[i] == '.':
+                continue
+            if path_list[i] == '..':
+                if ans:
+                    ans.pop()
+            else:
+                ans.append('/' + path_list[i])
+        if not ans:
+            return '/'
+        return ''.join(ans)
+
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/insert-interval/"""
+        n = len(intervals)
+        idx = -1
+        i = 0
+        while i < n:
+            if intervals[i][0] < newInterval[0] and intervals[i][1] < newInterval[0]:
+                i += 1
+                idx = i
+                continue
+            if intervals[i][0] > newInterval[1]:
+                idx = i
+                break
+            newInterval[0] = min(intervals[i][0], newInterval[0])
+            newInterval[1] = max(intervals[i][1], newInterval[1])
+            del intervals[i]
+            n -= 1
+        return intervals[0: idx] + [newInterval] + intervals[idx: n]
+
+    def setZeroes(self, matrix: List[List[int]]) -> None:
+        """https://leetcode-cn.com/problems/set-matrix-zeroes/"""
+        if not matrix:
+            return
+        n, m = len(matrix), len(matrix[0])
+        idx = []
+        for i in range(n):
+            for j in range(m):
+                if matrix[i][j] == 0:
+                    idx.append([i, j])
+        for i in range(len(idx)):
+            for j in range(n):
+                matrix[j][idx[i][1]] = 0
+            for j in range(m):
+                matrix[idx[i][0]][j] = 0
+
+
 
 

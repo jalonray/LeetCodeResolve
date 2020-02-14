@@ -1,8 +1,22 @@
-import time
-
 from Solution import Solution
 
 if __name__ == '__main__':
+    # for i in range(1, 10):
+    #     for j in range(1, i + 1):
+    #         end = ' '
+    #         if j == i:
+    #             end = '\n'
+    #         print(str(i) + '*' + str(j) + '=' + str(i * j), end=end)
+
+    # def fibonacci(x):
+    #     if x == 1:
+    #         return 1
+    #     if x == 2:
+    #         return 1
+    #     return fibonacci(x - 1) + fibonacci(x - 2)
+    #
+    # print(fibonacci(60))
+    #
     solution = Solution()
     # print(solution.two_sum([3, 2, 4], 6))
 
@@ -102,4 +116,27 @@ if __name__ == '__main__':
     # print(solution.permuteUnique([1, 1, 2, 2]))
     # print(solution.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
     # print(solution.findMedianSortedArrays([1, 2, 5], [3, 4]))
-    print(solution.spiralOrder([[1, 2, 3, 4],[5, 6, 7, 8],[9,10,11,12]]))
+    # print(solution.spiralOrder([[1, 2, 3, 4],[5, 6, 7, 8],[9,10,11,12]]))
+    # print(solution.canJump([3, 2, 1, 0, 4]))
+    # print(solution.merge([[1,3],[2,6],[8,10],[15,18]]))
+    # print(solution.lengthOfLastWord(""))
+    # print(solution.generateMatrix(3))
+    # print(solution.getPermutation(3, 3))
+    # solution.printListNode(solution.rotateRight(
+    #     ListNode(0, ListNode(1, ListNode(2))),
+    #     6))
+    # print(solution.uniquePaths(6, 2))
+    # print(solution.uniquePathsWithObstacles([[1]]))
+    # print(solution.plusOne([9, 9, 9]))
+    # print(solution.addBinary("0", "0"))
+    # print(solution.mySqrt(4))
+    # print(solution.climbStairs(5))
+    # print(solution.simplifyPath("/a//b////c/d//././/.."))
+    # print(solution.insert([[9, 11]], [4, 8]))
+    matrix = [
+  [0,1,2,0],
+  [3,4,5,2],
+  [1,3,1,5]
+]
+    solution.setZeroes(matrix)
+    print(matrix)
