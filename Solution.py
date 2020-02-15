@@ -1535,6 +1535,101 @@ class Solution:
             for j in range(m):
                 matrix[idx[i][0]][j] = 0
 
+    def trap(self, height: List[int]) -> int:
+        """https://leetcode-cn.com/problems/trapping-rain-water/"""
+        n = len(height)
+        if n == 0:
+            return 0
+        ans = 0
+        max_top = 0
+        max_idx = 0
+        for i in range(n):
+            if max_top <= height[i]:
+                max_top = height[i]
+                max_idx = i
+            else:
+                ans += max_top - height[i]
+        max_current = 0
+        for i in range(n - 1, max_idx, -1):
+            if max_current < height[i]:
+                max_current = height[i]
+            ans -= max_top - max_current
+        return ans
+
+    def jump(self, nums: List[int]) -> int:
+        """https://leetcode-cn.com/problems/jump-game-ii/"""
+        n = len(nums)
+        ans = [0 for _ in range(n)]
+        idx = 1
+        for i in range(n):
+            end = min(i + 1 + nums[i], n)
+            if end > idx:
+                for j in range(idx, end):
+                    if ans[j] == 0:
+                        ans[j] = ans[i] + 1
+                    else:
+                        ans[j] = min(ans[j], ans[i] + 1)
+                idx = end
+                if idx == n:
+                    break
+        return ans[n - 1]
+
+    def isNumber(self, s: str) -> bool:
+        """https://leetcode-cn.com/problems/valid-number/"""
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
+
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        """https://leetcode-cn.com/problems/search-a-2d-matrix/"""
+        n = len(matrix)
+        if n == 0:
+            return False
+        m = len(matrix[0])
+        if m == 0:
+            return False
+        i, j = 0, n - 1
+        r = -1
+        while i <= j:
+            middle = (i + j) // 2
+            if matrix[middle][0] <= target <= matrix[middle][m - 1]:
+                r = middle
+                break
+            elif matrix[middle][0] > target:
+                j = middle - 1
+            else:
+                i = middle + 1
+        i, j = 0, m - 1
+        while i <= j:
+            middle = (i + j) // 2
+            if matrix[r][middle] == target:
+                return True
+            elif matrix[r][middle] > target:
+                j = middle - 1
+            else:
+                i = middle + 1
+        return False
+
+    def sortColors(self, nums: List[int]) -> None:
+        "https://leetcode-cn.com/problems/sort-colors/"
+        n = len(nums)
+        if n == 0:
+            return
+        # red white blue
+        color = [0, 0, 0]
+        for i in range(n):
+            color[nums[i]] += 1
+        for i in range(n):
+            if i < color[0]:
+                nums[i] = 0
+            elif color[0] <= i < color[0] + color[1]:
+                nums[i] = 1
+            else:
+                nums[i] = 2
+
+
 
 
 
