@@ -1,4 +1,4 @@
-from Solution import Solution, ListNode
+from Solution import Solution, ListNode, TreeNode
 
 if __name__ == '__main__':
     # for i in range(1, 10):
@@ -160,10 +160,10 @@ if __name__ == '__main__':
     # solution.printListNode(solution.partition(solution.createLinkList([2,0,4,1,3,1,4,0,3]), 3))
     # solution.printListNode(solution.partition(solution.createLinkList([1, 4, 2, 3, 5, 2]), 3))
     # solution.printListNode(solution.partition(solution.createLinkList([3, 1]), 2))
-    nums1 = [1, 2, 3, 0, 0, 0]
-    nums2 = [2, 5, 6]
-    solution.mergeSortedArray(nums1, 3, nums2, 2)
-    print(nums1)
+    # nums1 = [1, 2, 3, 0, 0, 0]
+    # nums2 = [2, 5, 6]
+    # solution.mergeSortedArray(nums1, 3, nums2, 2)
+    # print(nums1)
     # nums1 = [1]
     # nums2 = []
     # solution.mergeSortedArray(nums1, 1, nums2, 0)
@@ -171,4 +171,10 @@ if __name__ == '__main__':
     # print(solution.combine(4, 2))
     # print(solution.subsets([1, 2, 3]))
     # print(solution.exist([["C","A","A"],["A","A","A"],["B","C","D"]], "AAB"))
-    print(solution.removeDuplicates_o1([0, 0, 1, 1, 1, 1, 2, 2, 3]))
+    # print(solution.removeDuplicates_o1([0, 0, 1, 1, 1, 1, 2, 2, 3]))
+    # print(solution.inorderTraversal(TreeNode(1, right_node=TreeNode(2, left_node=TreeNode(3)))))
+    # print(solution.postorderTraversal(TreeNode(1, right_node=TreeNode(2, left_node=TreeNode(3)))))
+    # print(solution.preorderTraversal(TreeNode(3, TreeNode(1), TreeNode(2))))
+    # print(solution.numTrees(5))
+    # print(solution.levelOrder(TreeNode(3, TreeNode(9), TreeNode(20, TreeNode(15), TreeNode(7)))))
+    print(solution.zigzagLevelOrder(TreeNode(3, TreeNode(9, TreeNode(10), TreeNode(11)), TreeNode(20, TreeNode(15), TreeNode(7)), )))

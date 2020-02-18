@@ -11,6 +11,14 @@ class ListNode:
         self.next = nextNode
 
 
+class TreeNode:
+
+    def __init__(self, x, left_node=None, right_node=None):
+        self.val = x
+        self.left = left_node
+        self.right = right_node
+
+
 class Solution:
 
     def two_sum(self, nums: List[int], target: int) -> List[int]:
@@ -74,7 +82,6 @@ class Solution:
                 temp.next = ListNode(a[i])
                 temp = temp.next
         return head
-
 
     def majorityElement(self, nums: List[int]) -> int:
         """https://leetcode-cn.com/problems/majority-element/"""
@@ -1244,6 +1251,16 @@ class Solution:
             res += matrix.pop(0)
             matrix = list(map(list, zip(*matrix)))[::-1]
         return res
+        # r, i, j, di, dj = [], 0, 0, 0, 1
+        # if matrix != []:
+        #     for _ in range(len(matrix) * len(matrix[0])):
+        #         r.append(matrix[i][j])
+        #         matrix[i][j] = 0
+        #         if matrix[(i + di) % len(matrix)][(j + dj) % len(matrix[0])] == 0:
+        #             di, dj = dj, -di
+        #         i += di
+        #         j += dj
+        # return r
 
     def canJump(self, nums: List[int]) -> bool:
         """https://leetcode-cn.com/problems/jump-game/"""
@@ -1939,5 +1956,158 @@ class Solution:
         """https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/"""
         return target in nums
 
+    def inorderTraversal(self, root: TreeNode) -> List[int]:
+        """https://leetcode-cn.com/problems/binary-tree-inorder-traversal/"""
+        if root is None:
+            return []
+        stack = [root]
+        ans = []
+        while stack:
+            temp = stack[-1]
+            if temp.left is not None:
+                stack.append(temp.left)
+                temp.left = None
+            elif temp.right is not None:
+                ans.append(temp.val)
+                stack.pop()
+                stack.append(temp.right)
+                temp.right = None
+            else:
+                ans.append(temp.val)
+                stack.pop()
+        return ans
+
+    def postorderTraversal(self, root: TreeNode) -> List[int]:
+        """https://leetcode-cn.com/problems/binary-tree-postorder-traversal/"""
+        if root is None:
+            return []
+        stack = [root]
+        ans = []
+        while stack:
+            temp = stack[-1]
+            if temp.left is not None:
+                stack.append(temp.left)
+                temp.left = None
+            elif temp.right is not None:
+                stack.append(temp.right)
+                temp.right = None
+            else:
+                ans.append(temp.val)
+                stack.pop()
+        return ans
+
+    def preorderTraversal(self, root: TreeNode) -> List[int]:
+        """https://leetcode-cn.com/problems/binary-tree-preorder-traversal/"""
+        if root is None:
+            return []
+        stack = [root]
+        ans = []
+        while stack:
+            temp = stack[-1]
+            ans.append(temp.val)
+            if temp.left is not None:
+                stack.append(temp.left)
+                temp.left = None
+            elif temp.right is not None:
+                stack.append(temp.right)
+                temp.right = None
+            else:
+                while temp.left is None and temp.right is None:
+                    stack.pop()
+                    if stack:
+                        temp = stack[-1]
+                    else:
+                        return ans
+                if temp.right is not None:
+                    stack.append(temp.right)
+                    temp.right = None
+        return ans
+
+    def numTrees(self, n: int) -> int:
+        """https://leetcode-cn.com/problems/unique-binary-search-trees/"""
+        if n == 0:
+            return 0
+        ans = [0 for _ in range(n + 1)]
+        ans[0] = 1
+        for i in range(n + 1):
+            for j in range(i):
+                ans[i] += ans[j] * ans[i - j - 1]
+        return ans[n]
+
+    def isValidBST(self, root: TreeNode) -> bool:
+        """https://leetcode-cn.com/problems/validate-binary-search-tree/"""
+        if root is None:
+            return True
+        stack = [root]
+        ans = []
+        while stack:
+            temp = stack[-1]
+            if temp.left is not None:
+                stack.append(temp.left)
+                temp.left = None
+            elif temp.right is not None:
+                ans.append(temp.val)
+                stack.pop()
+                stack.append(temp.right)
+                temp.right = None
+            else:
+                ans.append(temp.val)
+                stack.pop()
+        for i in range(len(ans) - 1):
+            if ans[i] >= ans[i + 1]:
+                return False
+        return True
+
+    def levelOrder(self, root: TreeNode) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/binary-tree-level-order-traversal/"""
+        ans = []
+        if root is None:
+            return ans
+        pre = [root]
+        current = []
+        while True:
+            item = []
+            for i in range(len(pre)):
+                item.append(pre[i].val)
+                if pre[i].left is not None:
+                    current.append(pre[i].left)
+                if pre[i].right is not None:
+                    current.append(pre[i].right)
+            ans.append(item)
+            if current:
+                pre = current
+                current = []
+            else:
+                break
+        return ans
+
+    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/"""
+        ans = []
+        if root is None:
+            return ans
+        pre = [root]
+        current = []
+        while True:
+            item = []
+            for i in range(len(pre)):
+                item.append(pre[i].val)
+                if pre[i].left is not None:
+                    current.append(pre[i].left)
+                if pre[i].right is not None:
+                    current.append(pre[i].right)
+            ans.append(item)
+            if current:
+                pre = current
+                current = []
+            else:
+                break
+        for i in range(1, len(ans), 2):
+            n = len(ans[i])
+            for j in range(n // 2):
+                temp = ans[i][j]
+                ans[i][j] = ans[i][n - j - 1]
+                ans[i][n - j - 1] = temp
+        return ans
 
 
