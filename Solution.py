@@ -83,6 +83,49 @@ class Solution:
                 temp = temp.next
         return head
 
+    def createBinaryTree(self, a):
+        b = []
+        idx = -1
+        for i in range(len(a)):
+            if a[i] is not None:
+                node = TreeNode(a[i])
+                b.append(node)
+                if idx == -1:
+                    idx += 1
+                    continue
+                n = i - 1
+                if n % 2 == 0:
+                    b[n // 2].right = node
+                else:
+                    b[n // 2].left = node
+        return b[0]
+
+    def printBinaryTree(self, root: TreeNode):
+        if root is None:
+            return []
+        stack = [root]
+        ans = []
+        while stack:
+            temp = stack[-1]
+            ans.append(temp.val)
+            if temp.left is not None:
+                stack.append(temp.left)
+                temp.left = None
+            elif temp.right is not None:
+                stack.append(temp.right)
+                temp.right = None
+            else:
+                while temp.left is None and temp.right is None:
+                    stack.pop()
+                    if stack:
+                        temp = stack[-1]
+                    else:
+                        return ans
+                if temp.right is not None:
+                    stack.append(temp.right)
+                    temp.right = None
+        return ans
+
     def majorityElement(self, nums: List[int]) -> int:
         """https://leetcode-cn.com/problems/majority-element/"""
         current = None
@@ -1246,21 +1289,21 @@ class Solution:
 
     def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
         """https://leetcode-cn.com/problems/spiral-matrix/"""
-        res = []
-        while matrix:
-            res += matrix.pop(0)
-            matrix = list(map(list, zip(*matrix)))[::-1]
-        return res
-        # r, i, j, di, dj = [], 0, 0, 0, 1
-        # if matrix != []:
-        #     for _ in range(len(matrix) * len(matrix[0])):
-        #         r.append(matrix[i][j])
-        #         matrix[i][j] = 0
-        #         if matrix[(i + di) % len(matrix)][(j + dj) % len(matrix[0])] == 0:
-        #             di, dj = dj, -di
-        #         i += di
-        #         j += dj
-        # return r
+        # res = []
+        # while matrix:
+        #     res += matrix.pop(0)
+        #     matrix = list(map(list, zip(*matrix)))[::-1]
+        # return res
+        r, i, j, di, dj = [], 0, 0, 0, 1
+        if matrix != []:
+            for _ in range(len(matrix) * len(matrix[0])):
+                r.append(matrix[i][j])
+                matrix[i][j] = 0
+                if matrix[(i + di) % len(matrix)][(j + dj) % len(matrix[0])] == 0:
+                    di, dj = dj, -di
+                i += di
+                j += dj
+        return r
 
     def canJump(self, nums: List[int]) -> bool:
         """https://leetcode-cn.com/problems/jump-game/"""
@@ -2104,10 +2147,106 @@ class Solution:
                 break
         for i in range(1, len(ans), 2):
             n = len(ans[i])
-            for j in range(n // 2):
-                temp = ans[i][j]
-                ans[i][j] = ans[i][n - j - 1]
-                ans[i][n - j - 1] = temp
+            ans[i] = ans[i][::-1]
         return ans
 
+    def isSymmetric(self, root: TreeNode) -> bool:
+        """https://leetcode-cn.com/problems/symmetric-tree/"""
+        # if root is None:
+        #     return True
+        # pre = [root]
+        # current = []
+        # while True:
+        #     item = []
+        #     allNone = True
+        #     for i in range(len(pre)):
+        #         if pre[i] is not None:
+        #             allNone = False
+        #             item.append(pre[i].val)
+        #             current.append(pre[i].left)
+        #             current.append(pre[i].right)
+        #         else:
+        #             item.append(None)
+        #             current.append(None)
+        #             current.append(None)
+        #     if allNone:
+        #         break
+        #     n = len(item)
+        #     for i in range(n // 2):
+        #         if item[i] != item[n - i - 1]:
+        #             return False
+        #     if current:
+        #         pre = current
+        #         current = []
+        #     else:
+        #         break
+        # return True
+        if root is None:
+            return True
+
+        def symmetirc(left: TreeNode, right: TreeNode) -> bool:
+            if left is None and right is None:
+                return True
+            if left is None or right is None:
+                return False
+            return left.val == right.val and symmetirc(left.right, right.left) and symmetirc(left.left, right.right)
+
+        return symmetirc(root.left, root.right)
+
+    def maxDepth(self, root: TreeNode) -> int:
+        """https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/"""
+        if root is None:
+            return 0
+        return max(self.maxDepth(root.left) + 1, self.maxDepth(root.right) + 1)
+
+    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/"""
+        ans = []
+        if root is None:
+            return ans
+        pre = [root]
+        current = []
+        while True:
+            item = []
+            for i in range(len(pre)):
+                item.append(pre[i].val)
+                if pre[i].left is not None:
+                    current.append(pre[i].left)
+                if pre[i].right is not None:
+                    current.append(pre[i].right)
+            ans.append(item)
+            if current:
+                pre = current
+                current = []
+            else:
+                break
+        return ans[::-1]
+
+    def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
+        """https://leetcode-cn.com/problems/convert-sorted-array-to-binary-search-tree/"""
+        if not nums:
+            return None
+        idx = len(nums) // 2
+        node = TreeNode(nums[idx])
+        node.left = self.sortedArrayToBST(nums[: idx])
+        node.right = self.sortedArrayToBST(nums[idx + 1:])
+        return node
+
+    def sortedListToBST(self, head: ListNode) -> TreeNode:
+        """https://leetcode-cn.com/problems/convert-sorted-list-to-binary-search-tree/"""
+        if not head:
+            return None
+        if head.next is None:
+            return TreeNode(head.val)
+        pre, temp, middle = head, head, head
+        while temp is not None and temp.next is not None:
+            temp = temp.next.next
+            if pre != middle:
+                pre = pre.next
+            middle = middle.next
+        node = TreeNode(middle.val)
+        pre.next = None
+        node.left = self.sortedListToBST(head)
+        node.right = self.sortedListToBST(middle.next)
+        return node
 
