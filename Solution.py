@@ -3,6 +3,7 @@ import collections
 from typing import List
 
 
+# noinspection PyPep8Naming
 class ListNode:
 
     def __init__(self, x, nextNode=None):
@@ -61,6 +62,19 @@ class Solution:
                 print('->', end='')
             l = l.next
         print(')')
+
+    def createLinkList(self, a):
+        head = None
+        temp = None
+        for i in range(len(a)):
+            if head is None:
+                head = ListNode(a[i])
+                temp = head
+            else:
+                temp.next = ListNode(a[i])
+                temp = temp.next
+        return head
+
 
     def majorityElement(self, nums: List[int]) -> int:
         """https://leetcode-cn.com/problems/majority-element/"""
@@ -1690,6 +1704,93 @@ class Solution:
                 ans = max(ans, heights[stack.pop()] * (i - stack[-1] - 1))
             stack.append(i)
         return ans
+
+    def partition(self, head: ListNode, x: int) -> ListNode:
+        """https://leetcode-cn.com/problems/partition-list/"""
+        # if head is None:
+        #     return head
+        # left, temp, item = head, head, head
+        # while temp is not None and temp.val < x:
+        #     temp = temp.next
+        # if temp is None:
+        #     return head
+        # right = temp
+        # if temp == head or left.val > x:
+        #     item = temp
+        #     pre = item
+        #     while item is not None and item.val >= x:
+        #         if pre != item:
+        #             pre = pre.next
+        #         item = item.next
+        #     if item is not None:
+        #         pre.next = item.next
+        #         item.next = head
+        #         left = head = item
+        #     else:
+        #         return head
+        # else:
+        #     while left.next != temp and left.next.val <= x:
+        #         left = left.next
+        # while left.next != temp or right.next is not None:
+        #     if left.next != temp and left.next.val > x:
+        #         item = left.next
+        #         left.next = item.next
+        #         item.next = right.next
+        #         right.next = item
+        #         right = item
+        #     elif right.next is not None and right.next.val < x:
+        #         item = right.next
+        #         right.next = item.next
+        #         item.next = left.next
+        #         left.next = item
+        #         left = item
+        #     elif left.next != temp:
+        #         left = left.next
+        #     else:
+        #         right = right.next
+        # return head
+        temp = head
+        smaller, bigger = [], []
+        while temp is not None:
+            if temp.val < x:
+                smaller.append(temp)
+            else:
+                bigger.append(temp)
+            temp = temp.next
+        ans = None
+        temp = None
+        tail = None
+        for i, item in enumerate(smaller):
+            tail = item
+            if ans is None:
+                ans = temp = item
+            else:
+                temp.next = item
+                temp = item
+        for i, item in enumerate(bigger):
+            tail = item
+            if ans is None:
+                ans = temp = item
+            else:
+                temp.next = item
+                temp = item
+        if tail:
+            tail.next = None
+        return ans
+
+    def mergeSortedArray(self, nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+        """https://leetcode-cn.com/problems/merge-sorted-array/"""
+        j = 0
+        for i in range(m + n):
+            if j < n and nums2[j] < nums1[i]:
+                for k in range(m + j, i, -1):
+                    nums1[k] = nums1[k - 1]
+                nums1[i] = nums2[j]
+                j += 1
+            elif i - j >= m:
+                nums1[i] = nums2[j]
+                j += 1
+
 
 
 
