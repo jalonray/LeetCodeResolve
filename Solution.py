@@ -1791,7 +1791,153 @@ class Solution:
                 nums1[i] = nums2[j]
                 j += 1
 
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/combinations/"""
+        if n == 0 or k == 0:
+            return []
+        nums = [0 for _ in range(n)]
+        for i in range(n):
+            nums[i] = i + 1
 
+        def insert_num(insert_nums, current_nums, all_nums, count, max_count):
+            if count == max_count:
+                result = current_nums.copy()
+                insert_nums.append(result)
+            else:
+                nums_len = len(all_nums)
+                for idx in range(nums_len):
+                    current_nums[count] = all_nums[idx]
+                    insert_num(insert_nums, current_nums, all_nums[idx + 1: nums_len], count + 1, max_count)
+
+        ans = []
+        cache = [0 for _ in range(k)]
+        insert_num(ans, cache, nums, 0, k)
+        return ans
+
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/subsets/"""
+        # n = len(nums)
+        # ans = []
+        #
+        # def insert_num(insert_nums, current_nums, all_nums, count, max_count):
+        #     if count == max_count:
+        #         result = current_nums.copy()
+        #         insert_nums.append(result)
+        #     else:
+        #         nums_len = len(all_nums)
+        #         for idx in range(nums_len):
+        #             current_nums[count] = all_nums[idx]
+        #             insert_num(insert_nums, current_nums, all_nums[idx + 1: nums_len], count + 1, max_count)
+        #
+        # for i in range(0, n + 1):
+        #     insert_num(ans, [0 for _ in range(i)], nums, 0, i)
+        # return ans
+        n = len(nums)
+        ans = [[]]
+        for i in range(n):
+            len_ans = len(ans)
+            for j in range(len_ans):
+                item = ans[j].copy()
+                item.append(nums[i])
+                ans.append(item)
+        return ans
+
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        """https://leetcode-cn.com/problems/word-search/"""
+        n = len(board)
+        if n == 0:
+            return False
+        m = len(board[0])
+        if m == 0:
+            return False
+        len_word = len(word)
+        if len_word == 0:
+            return True
+        start_num = []
+        for i in range(n):
+            for j in range(m):
+                if board[i][j] == word[0]:
+                    start_num.append([i, j])
+        if not start_num:
+            return False
+        for k in range(len(start_num)):
+            idx, step, board_cp = 0, [0 for _ in range(len_word)], [[board[i][j] for j in range(m)] for i in range(n)]
+            i, j = start_num[k][0], start_num[k][1]
+            while -1 <= i <= n and -1 <= j <= m:
+                if 0 <= i < n and 0 <= j < m and board_cp[i][j] == word[idx] and step[idx] < 4:
+                    if idx == len_word - 1:
+                        return True
+                    board_cp[i][j] = None
+                    if step[idx] == 0:
+                        # 下
+                        i += 1
+                    elif step[idx] == 1:
+                        # 右
+                        j += 1
+                    elif step[idx] == 2:
+                        # 上
+                        i -= 1
+                    elif step[idx] == 3:
+                        # 左
+                        j -= 1
+                    else:
+                        break
+                    idx += 1
+                else:
+                    if step[idx] > 3:
+                        step[idx] = 0
+                        idx -= 1
+                        continue
+                    idx -= 1
+                    if idx < 0:
+                        break
+                    elif step[idx] == 0:
+                        # 上一步下，这步右
+                        step[idx] += 1
+                        i -= 1
+                        j += 1
+                        idx += 1
+                    elif step[idx] == 1:
+                        # 上一步右，这步上
+                        step[idx] += 1
+                        j -= 1
+                        i -= 1
+                        idx += 1
+                    elif step[idx] == 2:
+                        # 上一步上，这步左
+                        step[idx] += 1
+                        i += 1
+                        j -= 1
+                        idx += 1
+                    elif step[idx] == 3:
+                        # 上一步左，这步跳出
+                        step[idx] += 1
+                        j += 1
+                        board_cp[i][j] = word[idx]
+        return False
+
+    def removeDuplicates_o1(self, nums: List[int]) -> int:
+        """https://leetcode-cn.com/problems/remove-duplicates-from-sorted-array-ii/"""
+        n = len(nums)
+        if n <= 2:
+            return n
+        j, pre, count = 1, 0, 0
+        for i in range(1, n):
+            if nums[i] != nums[pre]:
+                count = 0
+                nums[j] = nums[i]
+                j += 1
+            else:
+                count += 1
+                if count < 2:
+                    nums[j] = nums[i]
+                    j += 1
+            pre = i
+        return j
+
+    def search_ii(self, nums: List[int], target: int) -> bool:
+        """https://leetcode-cn.com/problems/search-in-rotated-sorted-array-ii/"""
+        return target in nums
 
 
 

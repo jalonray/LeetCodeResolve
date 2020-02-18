@@ -168,3 +168,7 @@ if __name__ == '__main__':
     # nums2 = []
     # solution.mergeSortedArray(nums1, 1, nums2, 0)
     # print(nums1)
+    # print(solution.combine(4, 2))
+    # print(solution.subsets([1, 2, 3]))
+    # print(solution.exist([["C","A","A"],["A","A","A"],["B","C","D"]], "AAB"))
+    print(solution.removeDuplicates_o1([0, 0, 1, 1, 1, 1, 2, 2, 3]))
