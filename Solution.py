@@ -1629,6 +1629,67 @@ class Solution:
             else:
                 nums[i] = 2
 
+    def deleteDuplicates(self, head: ListNode) -> ListNode:
+        """https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list/"""
+        pre, temp = head, head
+        while temp is not None:
+            if pre == temp:
+                temp = temp.next
+                continue
+            elif pre.val == temp.val:
+                pre.next = temp.next
+                temp.next = None
+                temp = pre.next
+            else:
+                pre = temp
+                temp = temp.next
+        return head
+
+    def deleteDuplicates_ii(self, head: ListNode) -> ListNode:
+        """https://leetcode-cn.com/problems/remove-duplicates-from-sorted-list-ii/"""
+        pre, temp = head, head
+        while temp is not None:
+            if temp.next is not None and temp.val == temp.next.val:
+                item = temp.next
+                while item is not None and item.val == temp.val:
+                    item = item.next
+                if pre != temp:
+                    pre.next = item
+                    temp = item
+                else:
+                    head = item
+                    pre = item
+                    temp = item
+            elif pre != temp:
+                pre = temp
+                temp = temp.next
+            else:
+                temp = temp.next
+        return head
+
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        """https://leetcode-cn.com/problems/largest-rectangle-in-histogram/"""
+        # n = len(heights)
+        # if n == 0:
+        #     return 0
+        # min_height = [[None for _ in range(i)] for i in range(1, n + 1)]
+        # ans = 0
+        # for i in range(n):
+        #     for j in range(i, -1, -1):
+        #         if i == j:
+        #             min_height[i][j] = heights[i]
+        #         else:
+        #             min_height[i][j] = min(min_height[i][j + 1], heights[j])
+        #         ans = max(min_height[i][j] * (i - j + 1), ans)
+        # return ans
+        heights.append(0)
+        stack = [-1]
+        ans = 0
+        for i in range(0, len(heights)):
+            while stack and heights[stack[-1]] > heights[i]:
+                ans = max(ans, heights[stack.pop()] * (i - stack[-1] - 1))
+            stack.append(i)
+        return ans
 
 
 
