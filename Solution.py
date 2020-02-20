@@ -2250,3 +2250,102 @@ class Solution:
         node.right = self.sortedListToBST(middle.next)
         return node
 
+    def grayCode(self, n: int) -> List[int]:
+        """https://leetcode-cn.com/problems/gray-code/"""
+        # if n == 1:
+        #     return [0, 1]
+        # else:
+        #     ans = self.grayCode(n - 1)
+        #     value = 2 ** (n - 1)
+        #     for i in range(len(ans) - 1, -1, -1):
+        #         ans.append(value + ans[i])
+        #     return ans
+        # i, ans = 0, []
+        # while i < 1 << n:
+        #     ans.append(i ^ i >> 1)
+        #     i += 1
+        # return ans
+        return [i ^ (i >> 1) for i in range(1 << n)]
+
+    def minWindow(self, s: str, t: str) -> str:
+        """https://leetcode-cn.com/problems/minimum-window-substring/"""
+        if not t:
+            return t
+        if not s:
+            return s
+        char_map = {}
+        count_map = {}
+        match_map = {}
+        for i in range(len(t)):
+            if t[i] in char_map.keys():
+                char_map[t[i]] += 1
+            else:
+                char_map[t[i]] = 1
+                count_map[t[i]] = 0
+                match_map[t[i]] = False
+        i, j, n, right, ans, ans_i, ans_j, m = 0, 0, len(s), True, float('inf'), None, None, len(char_map.keys())
+
+        def all_match(all_match_map):
+            for i, item in enumerate(all_match_map.values()):
+                if not item:
+                    return False
+            return True
+
+        while i < n and j < n:
+            if right:
+                if s[j] in char_map.keys():
+                    count_map[s[j]] += 1
+                    match_map[s[j]] = count_map[s[j]] >= char_map[s[j]]
+                    if match_map[s[j]]:
+                        if all_match(match_map):
+                            right = False
+                            if ans > j - i + 1:
+                                ans = j - i + 1
+                                ans_i = i
+                                ans_j = j
+                            continue
+            else:
+                if s[i] in char_map.keys():
+                    count_map[s[i]] -= 1
+                    match_map[s[i]] = count_map[s[i]] >= char_map[s[i]]
+                    if not match_map[s[i]]:
+                        match_map[s[i]] = True
+                        count_map[s[i]] += 1
+                        right = True
+                        j += 1
+                        continue
+                    else:
+                        if ans > j - i:
+                            ans = j - i
+                            ans_i = i + 1
+                            ans_j = j
+                else:
+                    if ans > j - i:
+                        ans = j - i
+                        ans_i = i + 1
+                        ans_j = j
+            if right:
+                j += 1
+            else:
+                i += 1
+        if ans_i is None or ans_j is None:
+            return ""
+        return s[ans_i:ans_j + 1]
+
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/subsets-ii/"""
+        nums = sorted(nums)
+        n = len(nums)
+        ans = [[]]
+        for i in range(n):
+            len_ans = len(ans)
+            for j in range(len_ans):
+                item = ans[j].copy()
+                item.append(nums[i])
+                if item not in ans:
+                    ans.append(item)
+        return ans
+
+    def numDecodings(self, s: str) -> int:
+        """https://leetcode-cn.com/problems/decode-ways/"""
+
