@@ -2348,4 +2348,120 @@ class Solution:
 
     def numDecodings(self, s: str) -> int:
         """https://leetcode-cn.com/problems/decode-ways/"""
+        n = len(s)
+        if n == 0:
+            return 0
+        if n == 1 and s[0] == '0':
+            return 0
+        short_dp = [1]
+        long_dp = [0]
+        for i in range(1, n):
+            if s[i] == '0':
+                if s[i - 1] == '1' or s[i - 1] == '2':
+                    short_dp.append(0)
+                    long_dp.append(short_dp[i - 1])
+                else:
+                    return 0
+            elif s[i - 1] == '1' or (s[i - 1] == '2' and s[i] <= '6'):
+                short_dp.append(short_dp[i - 1] + long_dp[i - 1])
+                long_dp.append(short_dp[i - 1])
+            else:
+                short_dp.append(short_dp[i - 1] + long_dp[i - 1])
+                long_dp.append(0)
+        return long_dp[n - 1] + short_dp[n - 1]
+
+    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
+        """https://leetcode-cn.com/problems/reverse-linked-list-ii/"""
+        if head is None:
+            return head
+
+        def reverse(first: ListNode, l_in: int) -> (ListNode, ListNode):
+            if not first or l_in <= 1:
+                return first, first
+            last = first
+            second = first.next
+            temp_in = None
+            for i_in in range(l_in - 1):
+                temp_in = second.next
+                second.next = first
+                first = second
+                second = temp_in
+            last.next = temp_in
+            return first, last
+
+        if m <= 1:
+            first_n, last = reverse(head, n - m + 1)
+            return first_n
+        temp, start_count = head, 1
+        while temp is not None:
+            if start_count < m:
+                start_count += 1
+                if start_count == m:
+                    first_n, last = reverse(temp.next, n - m + 1)
+                    temp.next = first_n
+                    return head
+            temp = temp.next
+        return head
+
+    def restoreIpAddresses(self, s: str) -> List[str]:
+        """https://leetcode-cn.com/problems/restore-ip-addresses/"""
+
+        def tryIpAddress(all_ips: List[str], cur_rel: str, current_ips: str, about_position: int):
+            if about_position == 0 or len(current_ips) == 0:
+                return
+            if about_position == 1:
+                if int(current_ips) <= 255 and ((len(current_ips) == 1) or (len(current_ips) and current_ips[0] != '0')):
+                    all_ips.append(cur_rel + current_ips)
+                return
+            for i in range(1, 4):
+                if int(current_ips[:i]) <= 255 and ((i == 1) or (i > 1 and current_ips[0] != '0')):
+                    tryIpAddress(all_ips, cur_rel + current_ips[:i] + '.', current_ips[i: len(current_ips)], about_position - 1)
+
+        ans = []
+        tryIpAddress(ans, '', s, 4)
+        return ans
+
+    def generateTrees(self, n: int) -> List[TreeNode]:
+        """https://leetcode-cn.com/problems/unique-binary-search-trees-ii/"""
+
+        # def generate_trees(start, end):
+        #     if start > end:
+        #         return [None, ]
+        #
+        #     all_trees = []
+        #     for i in range(start, end + 1):  # pick up a root
+        #         # all possible left subtrees if i is choosen to be a root
+        #         left_trees = generate_trees(start, i - 1)
+        #
+        #         # all possible right subtrees if i is choosen to be a root
+        #         right_trees = generate_trees(i + 1, end)
+        #
+        #         # connect left and right subtrees to the root i
+        #         for l in left_trees:
+        #             for r in right_trees:
+        #                 current_tree = TreeNode(i)
+        #                 current_tree.left = l
+        #                 current_tree.right = r
+        #                 all_trees.append(current_tree)
+        #
+        #     return all_trees
+        #
+        # return generate_trees(1, n) if n else []
+        from functools import reduce
+        from operator import add
+        if n:
+            situ = {0: dict.fromkeys(range(1, n + 2), [None])}  # 外层的键表示当前的树由多少个数字组成 内层的键表示root的val
+            for i in range(1, n + 1):
+                situ[i] = dict()
+                for j in range(1, n + 2 - i):  # 表示左端其实的索引
+                    situ[i][j] = list()
+                    for step in range(i):
+                        for le in situ[step][j]:
+                            for ri in situ[i - step - 1][j + step + 1]:
+                                new = TreeNode(step + j)
+                                new.left, new.right = le, ri
+                                situ[i][j].append(new)
+            return reduce(add, situ[n].values())
+        return []
+
 
