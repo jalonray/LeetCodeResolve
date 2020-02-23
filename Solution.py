@@ -102,7 +102,7 @@ class Solution:
 
     def printBinaryTree(self, root: TreeNode):
         if root is None:
-            return []
+            return
         stack = [root]
         ans = []
         while stack:
@@ -120,11 +120,12 @@ class Solution:
                     if stack:
                         temp = stack[-1]
                     else:
-                        return ans
+                        print(ans)
+                        return
                 if temp.right is not None:
                     stack.append(temp.right)
                     temp.right = None
-        return ans
+        print(ans)
 
     def majorityElement(self, nums: List[int]) -> int:
         """https://leetcode-cn.com/problems/majority-element/"""
@@ -2463,5 +2464,53 @@ class Solution:
                                 situ[i][j].append(new)
             return reduce(add, situ[n].values())
         return []
+
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        """https://leetcode-cn.com/problems/same-tree/"""
+        if p is None or q is None:
+            return p == q
+        if p.val == q.val:
+            return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+        return False
+
+    def buildTree_pre_in(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        """https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/"""
+        if not preorder or not inorder:
+            return None
+
+        if preorder[0] not in inorder:
+            return None
+        val = preorder.pop(0)
+        root = TreeNode(val)
+        i = inorder.index(val)
+        root.left = self.buildTree_pre_in(preorder, inorder[0: i])
+        root.right = self.buildTree_pre_in(preorder, inorder[i + 1:])
+        return root
+
+    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
+        """https://leetcode-cn.com/problems/construct-binary-tree-from-inorder-and-postorder-traversal/"""
+        if not postorder or not inorder:
+            return None
+
+        if postorder[-1] not in inorder:
+            return None
+        val = postorder.pop()
+        root = TreeNode(val)
+        i = inorder.index(val)
+        root.right = self.buildTree(inorder[i + 1:], postorder)
+        root.left = self.buildTree(inorder[0: i], postorder)
+        return root
+
+    def isBalanced(self, root: TreeNode) -> bool:
+        """https://leetcode-cn.com/problems/balanced-binary-tree/"""
+        if root is None:
+            return True
+
+        def getHeight(tree_node: TreeNode):
+            if tree_node is None:
+                return 0
+            return max(getHeight(tree_node.left), getHeight(tree_node.right)) + 1
+
+        return abs(getHeight(root.left) - getHeight(root.right)) > 1
 
 
