@@ -2513,4 +2513,110 @@ class Solution:
 
         return abs(getHeight(root.left) - getHeight(root.right)) > 1
 
+    def minDepth(self, root: TreeNode) -> int:
+        """https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/"""
+        if root is None:
+            return 0
+        if root.left is None and root.right is None:
+            return 1
+        if root.left is None:
+            return self.minDepth(root.right) + 1
+        if root.right is None:
+            return self.minDepth(root.left) + 1
+        return min(self.minDepth(root.left), self.minDepth(root.right)) + 1
+
+    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+        """https://leetcode-cn.com/problems/path-sum/"""
+        if root is None:
+            return False
+        if root.left is None and root.right is None:
+            return sum == root.val
+        return self.hasPathSum(root.left, sum - root.val) or self.hasPathSum(root.right, sum - root.val)
+
+    def pathSum(self, root: TreeNode, sum: int) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/path-sum-ii/"""
+
+        def trySum(try_root: TreeNode, try_sum: int, try_ans: List[List[int]], cur_ans: List[int]):
+            if try_root is None:
+                return
+            if try_root.left is None and try_root.right is None and try_sum == try_root.val:
+                try_ans.append(cur_ans + [try_sum])
+                return
+            trySum(try_root.left, try_sum - try_root.val, try_ans, cur_ans + [try_root.val])
+            trySum(try_root.right, try_sum - try_root.val, try_ans, cur_ans + [try_root.val])
+
+        ans, cur = [], []
+        trySum(root, sum, ans, cur)
+        return ans
+
+    def flatten(self, root: TreeNode) -> None:
+        """https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/"""
+
+        def try_flatten(try_root: TreeNode, head: ListNode, tail: ListNode) -> (ListNode, ListNode):
+            if try_root is None:
+                return head, tail
+            if head is None:
+                head = ListNode(try_root.val)
+                tail = head
+            else:
+                temp = ListNode(try_root.val)
+                tail.next = temp
+                tail = temp
+            head, tail = try_flatten(try_root.left, head, tail)
+            return try_flatten(try_root.right, head, tail)
+
+        head, tail = try_flatten(root, None, None)
+        parent, temp = root, root
+        while head is not None:
+            if temp is None:
+                temp = TreeNode(head.val)
+            else:
+                temp.val = head.val
+                temp.left = None
+            if parent != temp:
+                parent.right = temp
+                parent = parent.right
+            temp = temp.right
+            head = head.next
+
+    def generate(self, numRows: int) -> List[List[int]]:
+        """https://leetcode-cn.com/problems/pascals-triangle/"""
+        if numRows == 0:
+            return []
+        ans = [[1]]
+        if numRows == 1:
+            return ans
+        for i in range(1, numRows):
+            pre = ans[-1]
+            cur = []
+            n = len(pre)
+            for j in range(n + 1):
+                if j == 0:
+                    cur.append(1)
+                elif j == n:
+                    cur.append(1)
+                else:
+                    cur.append(pre[j - 1] + pre[j])
+            ans.append(cur)
+        return ans
+
+    def getRow(self, rowIndex: int) -> List[int]:
+        """https://leetcode-cn.com/problems/pascals-triangle-ii/"""
+        ans = [1]
+        if rowIndex == 0:
+            return ans
+        for i in range(0, rowIndex):
+            pre = ans
+            cur = []
+            n = len(pre)
+            for j in range(n + 1):
+                if j == 0:
+                    cur.append(1)
+                elif j == n:
+                    cur.append(1)
+                else:
+                    cur.append(pre[j - 1] + pre[j])
+            ans = cur
+        return ans
+
 

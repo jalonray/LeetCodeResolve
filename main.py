@@ -7,7 +7,9 @@ if __name__ == '__main__':
     # solution.printListNode(solution.reverseBetween(solution.createLinkList([1,5]), 1, 2))
     # print(solution.restoreIpAddresses("010010"))
     # solution.printBinaryTree(solution.buildTree([9,3,15,20,7], [9,15,7,20,3]))
-    print(solution.isBalanced(solution.createBinaryTree([3, 9, 20, None, None, 15, 7])))
-
+    # print(solution.isBalanced(solution.createBinaryTree([3, 9, 20, None, None, 15, 7])))
+    # solution.printListNode(solution.flatten(solution.createBinaryTree([1,2,5,3,4,None,6])))
+    # print(solution.generate(5))
+    print(solution.getRow(3))
 
 
