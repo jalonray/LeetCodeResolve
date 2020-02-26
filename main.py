@@ -1,4 +1,4 @@
-from Solution import Solution, ListNode, TreeNode
+from Solution import Solution
 
 if __name__ == '__main__':
     solution = Solution()
@@ -10,6 +10,11 @@ if __name__ == '__main__':
     # print(solution.isBalanced(solution.createBinaryTree([3, 9, 20, None, None, 15, 7])))
     # solution.printListNode(solution.flatten(solution.createBinaryTree([1,2,5,3,4,None,6])))
     # print(solution.generate(5))
-    print(solution.getRow(3))
-
-
+    # print(solution.getRow(3))
+    # print(solution.minimumTotal([
+    #     [2],
+    #     [3, 4],
+    #     [6, 5, 7],
+    #     [4, 1, 8, 3]
+    # ]))
+    print(solution.maxProfit_ii([1, 2, 3, 4, 5]))

@@ -2619,4 +2619,60 @@ class Solution:
             ans = cur
         return ans
 
+    def minimumTotal(self, triangle: List[List[int]]) -> int:
+        """https://leetcode-cn.com/problems/triangle/"""
+        # if triangle is None:
+        #     return 0
+        # n = len(triangle)
+        # if n == 0:
+        #     return 0
+        #
+        # def try_mini(try_tri: List[List[int]], try_deep, pre_idx) -> int:
+        #     if try_deep == len(try_tri):
+        #         return 0
+        #     if try_deep == 0:
+        #         cur_idx = 0
+        #     else:
+        #         cur_idx = pre_idx
+        #     left = try_mini(try_tri, try_deep + 1, cur_idx)
+        #     right = try_mini(try_tri, try_deep + 1, cur_idx + 1)
+        #     return try_tri[try_deep][cur_idx] + min(left, right)
+        #
+        # return try_mini(triangle, 0, -1)
+        if triangle is None or len(triangle) == 0:
+            return 0
+        n = len(triangle)
+        dp = [0 for _ in range(n + 1)]
+        for i in range(n - 1, -1, -1):
+            row = triangle[i]
+            for j in range(len(row)):
+                dp[j] = min(dp[j], dp[j + 1]) + row[j]
+        return dp[0]
+
+    def maxProfit(self, prices: List[int]) -> int:
+        """https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock/"""
+        min_price = float("-inf")
+        max_profit = 0
+        for i in range(len(prices)):
+            if min_price > prices[i]:
+                min_price = prices[i]
+            elif prices[i] - min_price > max_profit:
+                max_profit = prices[i] - min_price
+        return max_profit
+
+    def maxProfit_ii(self, prices: List[int]) -> int:
+        """https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii/"""
+        if len(prices) == 0:
+            return 0
+        profit = 0
+        pre = prices[0]
+        here = 0
+        for i in prices[1:]:
+            here = i - pre
+            if here > 0:
+                profit += here
+            pre = i
+        return profit
+
+
 
