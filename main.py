@@ -17,4 +17,24 @@ if __name__ == '__main__':
     #     [6, 5, 7],
     #     [4, 1, 8, 3]
     # ]))
-    print(solution.maxProfit_ii([1, 2, 3, 4, 5]))
+    # print(solution.maxProfit_ii([1, 2, 3, 4, 5]))
+    # print(solution.lengthOfLIS([1,3,6,7,9,4,10,5,6]))
+    # print(solution.isPalindromeStr("0P"))
+    # print(solution.ladderLength("a", "c", ["a","b","c"]))
+    # print(solution.ladderLength("hot", "dog", ["hot", "dog", "dot"]))
+    # print(solution.ladderLength("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]))
+    # print(solution.ladderLength("red", "tax", ["ted", "tex", "red", "tax", "tad", "den", "rex", "pee"]))
+#     print(solution.spiralOrder([
+#  [ 1, 2, 3 ],
+#  [ 4, 5, 6 ],
+#  [ 7, 8, 9 ]
+# ]))
+#     print(solution.sumNumbers(solution.createBinaryTree([1,2,3])))
+#     print(solution.coinChange([2], 3))
+    board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+    solution.solve_surrounded_regions(board)
+    print(board)
+
+
+
+

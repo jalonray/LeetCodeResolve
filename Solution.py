@@ -1295,16 +1295,38 @@ class Solution:
         #     res += matrix.pop(0)
         #     matrix = list(map(list, zip(*matrix)))[::-1]
         # return res
-        r, i, j, di, dj = [], 0, 0, 0, 1
-        if matrix != []:
-            for _ in range(len(matrix) * len(matrix[0])):
-                r.append(matrix[i][j])
-                matrix[i][j] = 0
-                if matrix[(i + di) % len(matrix)][(j + dj) % len(matrix[0])] == 0:
-                    di, dj = dj, -di
-                i += di
-                j += dj
+        # r, i, j, di, dj = [], 0, 0, 0, 1
+        # if matrix != []:
+        #     for _ in range(len(matrix) * len(matrix[0])):
+        #         r.append(matrix[i][j])
+        #         matrix[i][j] = 0
+        #         if matrix[(i + di) % len(matrix)][(j + dj) % len(matrix[0])] == 0:
+        #             di, dj = dj, -di
+        #         i += di
+        #         j += dj
+        # return r
+        if not matrix:
+            return []
+        r, i, j, di, dj, m, n, count_i, count_j = [], 0, 0, 0, 1, len(matrix), len(matrix[0]), 0, 0
+        while m > 0 or n > 0:
+            r.append(matrix[i][j])
+            if count_i == m - 1 or count_j == n - 1:
+                di, dj = dj, -di
+                if count_i == m - 1:
+                    n -= 1
+                    count_i = 0
+                if count_j == n - 1:
+                    m -= 1
+                    count_j = 0
+            else:
+                if di != 0:
+                    count_i += 1
+                if dj != 0:
+                    count_j += 1
+            i += di
+            j += dj
         return r
+
 
     def canJump(self, nums: List[int]) -> bool:
         """https://leetcode-cn.com/problems/jump-game/"""
@@ -2411,12 +2433,14 @@ class Solution:
             if about_position == 0 or len(current_ips) == 0:
                 return
             if about_position == 1:
-                if int(current_ips) <= 255 and ((len(current_ips) == 1) or (len(current_ips) and current_ips[0] != '0')):
+                if int(current_ips) <= 255 and (
+                        (len(current_ips) == 1) or (len(current_ips) and current_ips[0] != '0')):
                     all_ips.append(cur_rel + current_ips)
                 return
             for i in range(1, 4):
                 if int(current_ips[:i]) <= 255 and ((i == 1) or (i > 1 and current_ips[0] != '0')):
-                    tryIpAddress(all_ips, cur_rel + current_ips[:i] + '.', current_ips[i: len(current_ips)], about_position - 1)
+                    tryIpAddress(all_ips, cur_rel + current_ips[:i] + '.', current_ips[i: len(current_ips)],
+                                 about_position - 1)
 
         ans = []
         tryIpAddress(ans, '', s, 4)
@@ -2673,6 +2697,199 @@ class Solution:
                 profit += here
             pre = i
         return profit
+
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        """https://leetcode-cn.com/problems/longest-increasing-subsequence/"""
+        n = len(nums)
+        if n == 0:
+            return 0
+        import heapq
+        dp = heapq()
+        for i, item in enumerate(nums):
+            curr_max = 0
+            if i == 0:
+                dp.append(1)
+                continue
+            for j in range(len(dp)):
+                if nums[i] > nums[j] and curr_max < dp[j]:
+                    curr_max = dp[j]
+            dp.append(curr_max + 1)
+        return max(dp)
+
+    def isPalindromeStr(self, s: str) -> bool:
+        """https://leetcode-cn.com/problems/valid-palindrome/"""
+        n = len(s)
+        if n == 0:
+            return True
+        i = 0
+        j = n - 1
+        while i <= j:
+            while i <= j and not s[i].isalpha() and not s[i].isnumeric():
+                i += 1
+            while i <= j and not s[j].isalpha() and not s[j].isnumeric():
+                j -= 1
+            if i > j:
+                return True
+            if s[i].lower() != s[j].lower():
+                return False
+            i += 1
+            j -= 1
+        return True
+
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        """https://leetcode-cn.com/problems/word-ladder/"""
+        # if endWord not in wordList:
+        #     return 0
+        # w = set(wordList)
+        # head = {beginWord}
+        # tail = {endWord}
+        # res = 1
+        #
+        # def linked(a: str, b: str) -> bool:
+        #     if len(a) != len(b):
+        #         return False
+        #     diffCount = 0
+        #     i = 0
+        #     j = 0
+        #     while i < len(a) and j < len(b):
+        #         if a[i] != b[j]:
+        #             diffCount += 1
+        #             if diffCount > 1:
+        #                 return False
+        #         i += 1
+        #         j += 1
+        #     return diffCount == 1
+        #
+        # while head:
+        #     if len(head) > len(tail):
+        #         head, tail = tail, head
+        #
+        #     head_next = set()
+        #     w_next = set()
+        #     for cur in head:
+        #         for item in w:
+        #             if linked(cur, item):
+        #                 head_next.add(item)
+        #                 if item in tail:
+        #                     return res + 1
+        #             elif cur == item:
+        #                 for temp in tail:
+        #                     if linked(temp, cur):
+        #                         return res + 1
+        #             else:
+        #                 w_next.add(item)
+        #         for item in tail:
+        #             if linked(cur, item):
+        #                 return res + 1
+        #     head = head_next
+        #     w = w_next
+        #     res += 1
+        # return 0
+        if endWord not in wordList:
+            return 0
+        head = {beginWord}
+        tail = {endWord}
+        word_set = set(wordList)
+        res = 2
+        tmp = 'abcdefghijklmnopqrstuvwxyz'
+        q = set()
+        while head:
+            word_set -= q
+            q = set()
+            if len(head) > len(tail):
+                head, tail = tail, head
+            for word in head:
+                for i in range(len(word)):
+                    x, y = word[:i], word[i + 1:]
+                    for c in tmp:
+                        word_new = x + c + y
+                        if word_new in tail:
+                            return res
+                        if word_new in word_set:
+                            q.add(word_new)
+            head = q
+            res += 1
+        return 0
+
+    def sumNumbers(self, root: TreeNode) -> int:
+        """https://leetcode-cn.com/problems/sum-root-to-leaf-numbers/"""
+
+        def sum_number_impl(temp: TreeNode, current: int) -> int:
+            if temp is None:
+                return 0
+            current = current * 10 + temp.val
+            if temp.left is None and temp.right is None:
+                return current
+            sum = 0
+            if temp.left is not None:
+                sum += sum_number_impl(temp.left, current)
+            if temp.right is not None:
+                sum += sum_number_impl(temp.right, current)
+            return sum
+
+        return sum_number_impl(root, 0)
+
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        """https://leetcode-cn.com/problems/coin-change/"""
+        # 自底向上
+        # dp[i] 表示金额为i需要最少的硬币
+        # dp[i] = min(dp[i], dp[i - coins[j]]) j所有硬币
+
+        # dp = [float("inf")] * (amount + 1)
+        # dp[0] = 0
+        # for i in range(1, amount + 1):
+        #     dp[i] = min(dp[i - c] if i - c >= 0 else float("inf") for c in coins ) + 1
+        # return dp[-1] if dp[-1] != float("inf") else -1
+        # 自顶向下
+        import functools
+        @functools.lru_cache(None)
+        def helper(amount):
+            if amount == 0:
+                return 0
+            return min(helper(amount - c) if amount - c >= 0 else float("inf") for c in coins) + 1
+
+        res = helper(amount)
+        return res if res != float("inf") else -1
+
+    def solve_surrounded_regions(self, board: List[List[str]]) -> None:
+        """https://leetcode-cn.com/problems/surrounded-regions/"""
+        if not board:
+            return
+        n = len(board)
+        if n <= 2:
+            return
+        m = len(board[0])
+        if m <= 2:
+            return
+
+        def mark_one(mark_board: List[List[str]], i, j, mark_n, mark_m):
+            if i < 0 or i >= mark_n or j < 0 or j >= mark_m or mark_board[i][j] != 'O':
+                return
+            mark_board[i][j] = '1'
+            mark_one(mark_board, i - 1, j, mark_n, mark_m)
+            mark_one(mark_board, i + 1, j, mark_n, mark_m)
+            mark_one(mark_board, i, j - 1, mark_n, mark_m)
+            mark_one(mark_board, i, j + 1, mark_n, mark_m)
+
+        for i in range(n):
+            if board[i][0] == 'O':
+                mark_one(board, i, 0, n, m)
+            if board[i][m - 1] == 'O':
+                mark_one(board, i, m - 1, n, m)
+        for j in range(m):
+            if board[0][j] == 'O':
+                mark_one(board, 0, j, n, m)
+            if board[n - 1][j] == 'O':
+                mark_one(board, n - 1, j, n, m)
+        for i in range(n):
+            for j in range(m):
+                if board[i][j] == '1':
+                    board[i][j] = 'O'
+                elif board[i][j] == 'O':
+                    board[i][j] = 'X'
+
+
+
 
 
 
