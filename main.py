@@ -44,8 +44,8 @@ if __name__ == '__main__':
     # three.neighbors = [two, four]
     # four.neighbors = [one, three]
     # solution.cloneGraph(one)
-    print(solution.canCompleteCircuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]))
-
-
-
-
+    # print(solution.canCompleteCircuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]))
+    # print(solution.canThreePartsEqualSum([0, 2, 1, -6, 6, -7, 9, 1, 2, 0, 1]))
+    # print(solution.canThreePartsEqualSum([0, 2, 1, -6, 6, 7, 9, -1, 2, 0, 1]))
+    # print(solution.canThreePartsEqualSum([3, 3, 6, 5, -2, 2, 5, 1, -9, 4]))
+    print(solution.canThreePartsEqualSum([1, -1, 1, -1]))

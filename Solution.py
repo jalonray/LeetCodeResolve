@@ -3004,3 +3004,52 @@ class Solution:
             b = (b ^ i) & ~a
         return a
 
+    def canThreePartsEqualSum(self, A: List[int]) -> bool:
+        """https://leetcode-cn.com/problems/partition-array-into-three-parts-with-equal-sum/"""
+        ans = sum(A)
+        if ans % 3 != 0:
+            return False
+
+        avg = ans // 3
+
+        i = 0
+        j = len(A) - 1
+        res = False
+        lans, rans = None, None
+        while i < j:
+            if lans != avg or lans is None:
+                if lans is None:
+                    lans = 0
+                lans += A[i]
+                i += 1
+
+            if rans != avg or rans is None:
+                if rans is None:
+                    rans = 0
+                rans += A[j]
+                j -= 1
+
+            if lans == avg and rans == avg and i <= j:
+                res = True
+                break
+
+        return res
+
+    def hasCycle(self, head: ListNode) -> bool:
+        """https://leetcode-cn.com/problems/linked-list-cycle/"""
+        if not head:
+            return False
+        first, second, init = head, head, True
+        while True:
+            if first.next is None:
+                return False
+            if second.next is None or second.next.next is None:
+                return False
+            if init or first != second:
+                init = False
+                first = first.next
+                second = second.next.next
+            elif first == second:
+                return True
+        return False
+
