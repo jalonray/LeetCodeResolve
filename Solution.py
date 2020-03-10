@@ -2933,7 +2933,74 @@ class Solution:
         deepCopy(node, copy_map)
         return copy_map[node.val]
 
+    def canCompleteCircuit(self, gas: List[int], cost: List[int]) -> int:
+        """https://leetcode-cn.com/problems/gas-station/"""
+        if not cost:
+            return -1
+        if not gas:
+            return -1
+        n = len(gas)
+        i = 0
+        total_gas = 0
+        start = 0
+        loop = False
+        while True:
+            if total_gas == 0:
+                start = i
+            total_gas = gas[i]-cost[i]+total_gas
+            if total_gas < 0:
+                total_gas = 0
+                i += 1
+                if loop or i >= n:
+                    break
+                continue
+            i += 1
+            if i >= n:
+                i = i - n
+                loop = True
+            if i == start:
+                return start
+        return -1
 
+    def diameterOfBinaryTree(self, root: TreeNode) -> int:
+        """https://leetcode-cn.com/problems/diameter-of-binary-tree/"""
+        res = [0]
 
+        def deep_search(temp: TreeNode, result: List[int]) -> int:
+            if temp is None:
+                return 0
+            if temp.left is None and temp.right is None:
+                return 0
+            current = 0
+            left_deep = 0
+            right_deep = 0
+            if temp.left is not None:
+                left_deep = deep_search(temp.left, result) + 1
+                current += left_deep
+            if temp.right is not None:
+                right_deep = deep_search(temp.right, result) + 1
+                current += right_deep
+            if result[0] < current:
+                result[0] = current
+            return max(left_deep, right_deep)
 
+        deep_search(root, res)
+        return res[0]
+
+    def singleNumber(self, nums: List[int]) -> int:
+        """https://leetcode-cn.com/problems/single-number/"""
+        if not nums:
+            return -1
+        result = 0
+        for i in nums:
+            result = result ^ i
+        return result
+
+    def singleNumber_ii(self, nums: List[int]) -> int:
+        """https://leetcode-cn.com/problems/single-number-ii/"""
+        a, b = 0, 0
+        for i in nums:
+            a = (a ^ i) & ~b
+            b = (b ^ i) & ~a
+        return a
 

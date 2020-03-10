@@ -35,15 +35,16 @@ if __name__ == '__main__':
     # solution.solve_surrounded_regions(board)
     # print(board)
     # print(solution.palindrome_partition("efefeswrerws"))
-    one = Node(1)
-    two = Node(2)
-    three = Node(3)
-    four = Node(4)
-    one.neighbors = [two, four]
-    two.neighbors = [one, three]
-    three.neighbors = [two, four]
-    four.neighbors = [one, three]
-    solution.cloneGraph(one)
+    # one = Node(1)
+    # two = Node(2)
+    # three = Node(3)
+    # four = Node(4)
+    # one.neighbors = [two, four]
+    # two.neighbors = [one, three]
+    # three.neighbors = [two, four]
+    # four.neighbors = [one, three]
+    # solution.cloneGraph(one)
+    print(solution.canCompleteCircuit([1, 2, 3, 4, 5], [3, 4, 5, 1, 2]))
 
 
 
