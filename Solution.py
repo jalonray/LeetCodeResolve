@@ -19,6 +19,12 @@ class TreeNode:
         self.right = right_node
 
 
+class Node:
+    def __init__(self, val = 0, neighbors = []):
+        self.val = val
+        self.neighbors = neighbors
+
+
 class Solution:
 
     def two_sum(self, nums: List[int], target: int) -> List[int]:
@@ -1326,7 +1332,6 @@ class Solution:
             i += di
             j += dj
         return r
-
 
     def canJump(self, nums: List[int]) -> bool:
         """https://leetcode-cn.com/problems/jump-game/"""
@@ -2888,6 +2893,45 @@ class Solution:
                 elif board[i][j] == 'O':
                     board[i][j] = 'X'
 
+    def palindrome_partition(self, s: str) -> List[List[str]]:
+        """https://leetcode-cn.com/problems/palindrome-partitioning/"""
+        if len(s) == 0:
+            return [[]]
+        if len(s) == 1:
+            return [[s]]
+        tmp = []
+        for i in range(1, len(s) + 1):
+            left = s[:i]
+            right = s[i:]
+            if left == left[::-1]:  # 如果左侧不是回文的，则舍弃这种尝试
+                right = self.partition(right)
+                for i in range(len(right)):
+                    tmp.append([left] + right[i])
+        return tmp
+
+    def cloneGraph(self, node: Node) -> Node:
+        """https://leetcode-cn.com/problems/clone-graph/"""
+
+        def logNodes(log_node: Node, copyed):
+            if log_node is None:
+                return
+            if log_node.val in copyed.keys():
+                return
+            copyed[log_node.val] = Node(log_node.val)
+            for item in log_node.neighbors:
+                logNodes(item, copyed)
+
+        def deepCopy(deep_node, deep_copy):
+            if deep_copy[deep_node.val].neighbors:
+                return
+            deep_copy[deep_node.val].neighbors = [deep_copy[item.val] for item in deep_node.neighbors]
+            for item in deep_node.neighbors:
+                deepCopy(item, deep_copy)
+
+        copy_map = {}
+        logNodes(node, copy_map)
+        deepCopy(node, copy_map)
+        return copy_map[node.val]
 
 
 

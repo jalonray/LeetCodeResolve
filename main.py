@@ -1,4 +1,4 @@
-from Solution import Solution
+from Solution import Solution, Node
 
 if __name__ == '__main__':
     solution = Solution()
@@ -24,16 +24,26 @@ if __name__ == '__main__':
     # print(solution.ladderLength("hot", "dog", ["hot", "dog", "dot"]))
     # print(solution.ladderLength("hit", "cog", ["hot", "dot", "dog", "lot", "log", "cog"]))
     # print(solution.ladderLength("red", "tax", ["ted", "tex", "red", "tax", "tad", "den", "rex", "pee"]))
-#     print(solution.spiralOrder([
-#  [ 1, 2, 3 ],
-#  [ 4, 5, 6 ],
-#  [ 7, 8, 9 ]
-# ]))
-#     print(solution.sumNumbers(solution.createBinaryTree([1,2,3])))
-#     print(solution.coinChange([2], 3))
-    board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
-    solution.solve_surrounded_regions(board)
-    print(board)
+    # print(solution.spiralOrder([
+    #     [1, 2, 3],
+    #     [4, 5, 6],
+    #     [7, 8, 9]
+    # ]))
+    # print(solution.sumNumbers(solution.createBinaryTree([1, 2, 3])))
+    # print(solution.coinChange([2], 3))
+    # board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+    # solution.solve_surrounded_regions(board)
+    # print(board)
+    # print(solution.palindrome_partition("efefeswrerws"))
+    one = Node(1)
+    two = Node(2)
+    three = Node(3)
+    four = Node(4)
+    one.neighbors = [two, four]
+    two.neighbors = [one, three]
+    three.neighbors = [two, four]
+    four.neighbors = [one, three]
+    solution.cloneGraph(one)
 
 
 
