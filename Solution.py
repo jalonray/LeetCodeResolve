@@ -3053,3 +3053,14 @@ class Solution:
                 return True
         return False
 
+    def gcdOfStrings(self, str1: str, str2: str) -> str:
+        """https://leetcode-cn.com/problems/greatest-common-divisor-of-strings/"""
+        n, m = len(str1), len(str2)
+        if m > n:
+            str1, str2, m, n = str2, str1, n, m
+        if not str1.startswith(str2):
+            return ""
+        if m == n:
+            return str1
+        return self.gcdOfStrings(str2, str1[m:])
+
