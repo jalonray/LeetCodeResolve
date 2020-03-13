@@ -20,9 +20,42 @@ class TreeNode:
 
 
 class Node:
-    def __init__(self, val = 0, neighbors = []):
+    def __init__(self, val = 0, neighbors = [], next = None, random = None):
         self.val = val
         self.neighbors = neighbors
+        self.next = next
+        self.random = random
+
+
+class LRUCache:
+
+    def __init__(self, capacity: int):
+        self.capacity = capacity
+        self.cache = {}
+        self.priority = []
+        self.occupy = 0
+
+    def get(self, key: int) -> int:
+        if key not in self.cache.keys():
+            return -1
+        index = self.priority.index(key)
+        self.priority.pop(index)
+        self.priority.append(key)
+        return self.cache[key]
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache.keys():
+            index = self.priority.index(key)
+            self.priority.pop(index)
+            self.priority.append(key)
+            self.cache[key] = value
+            return
+        self.occupy += 1
+        if self.occupy > self.capacity:
+            _key = self.priority.pop(0)
+            self.cache.pop(_key)
+        self.priority.append(key)
+        self.cache[key] = value
 
 
 class Solution:
@@ -3063,4 +3096,141 @@ class Solution:
         if m == n:
             return str1
         return self.gcdOfStrings(str2, str1[m:])
+
+    def copyRandomList(self, head: Node) -> Node:
+        """https://leetcode-cn.com/problems/copy-list-with-random-pointer/"""
+        if not head:
+            return head
+        list_map = {}
+        temp = head
+        while temp is not None:
+            list_map[temp] = Node(temp.val)
+            temp = temp.next
+        temp = head
+        while temp is not None:
+            list_map[temp].next = list_map[temp.next]
+            list_map[temp].random = list_map[temp.random]
+            temp = temp.next
+        return list_map[head]
+
+    def wordBreak(self, s: str, wordDict: List[str]) -> bool:
+        """https://leetcode-cn.com/problems/word-break/"""
+        if not s or not wordDict:
+            return False
+        l = len(s)
+        memo = [False for _ in range(l + 1)]
+        memo[0] = True
+        for i in range(1, l + 1):
+            for j in range(i - 1, -1, -1):
+                if memo[j] and s[j: i] in wordDict:
+                    memo[i] = True
+                    break
+        return memo[l]
+
+    def detectCycle_II(self, head: ListNode) -> ListNode:
+        """https://leetcode-cn.com/problems/linked-list-cycle-ii/"""
+        if not head:
+            return head
+        temp = head
+        list_set = set()
+        while temp is not None:
+            if temp in list_set:
+                return temp
+            list_set.add(temp)
+            temp = temp.next
+        return None
+
+    def reorderList(self, head: ListNode) -> None:
+        """https://leetcode-cn.com/problems/reorder-list/"""
+        if not head:
+            return
+        temp = head
+        l = 0
+        while temp is not None:
+            l += 1
+            temp = temp.next
+        l = l // 2 + 1
+        temp = head
+        i = 0
+        l1, l2 = [], []
+        while temp is not None:
+            if i >= l:
+                l2.append(temp)
+            else:
+                l1.append(temp)
+            i += 1
+            temp = temp.next
+        temp = None
+        for i in range(max(len(l1), len(l2))):
+            if l1:
+                if temp is None:
+                    temp = l1.pop(0)
+                else:
+                    temp.next = l1.pop(0)
+                    temp = temp.next
+            if l2:
+                temp.next = l2.pop()
+                temp = temp.next
+        temp.next = None
+
+    def insertionSortList(self, head: ListNode) -> ListNode:
+        """https://leetcode-cn.com/problems/insertion-sort-list/"""
+        if not head:
+            return head
+
+        def insert(start: ListNode, end: ListNode, item: ListNode) -> (ListNode, ListNode):
+            if not item or not start or not end:
+                return start, end
+            if item.val < start.val:
+                item.next = start
+                return item, end
+            i = start
+            while i != end:
+                if i.val <= item.val < i.next.val:
+                    item.next = i.next
+                    i.next = item
+                    return start, end
+                i = i.next
+            return start, end
+
+        pre, temp = head, head.next
+        while temp:
+            if temp.val < pre.val:
+                n_item = temp.next
+                head, temp = insert(head, pre, temp)
+                temp.next = n_item
+            pre = temp
+            temp = temp.next
+        return head
+
+    def sortList(self, head: ListNode) -> ListNode:
+        """https://leetcode-cn.com/problems/sort-list/"""
+        if not head or not head.next:
+            return head
+        slow, fast = head, head
+        while fast and fast.next and fast.next.next:
+            fast, slow = fast.next.next, slow.next
+        mid, slow.next = slow.next, None
+        left, right = self.sortList(head), self.sortList(mid)
+        h = res = ListNode(0)
+        while left and right:
+            if left.val < right.val:
+                h.next = left
+                left = left.next
+            else:
+                h.next = right
+                right = right.next
+            h = h.next
+        h.next = left if left else right
+        return res.next
+
+    def maxPoints(self, points: List[List[int]]) -> int:
+        """https://leetcode-cn.com/problems/max-points-on-a-line/"""
+
+
+
+
+
+
+
 

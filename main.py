@@ -1,4 +1,4 @@
-from Solution import Solution, Node
+from Solution import Solution, Node, LRUCache
 
 if __name__ == '__main__':
     solution = Solution()
@@ -48,4 +48,20 @@ if __name__ == '__main__':
     # print(solution.canThreePartsEqualSum([0, 2, 1, -6, 6, -7, 9, 1, 2, 0, 1]))
     # print(solution.canThreePartsEqualSum([0, 2, 1, -6, 6, 7, 9, -1, 2, 0, 1]))
     # print(solution.canThreePartsEqualSum([3, 3, 6, 5, -2, 2, 5, 1, -9, 4]))
-    print(solution.canThreePartsEqualSum([1, -1, 1, -1]))
+    # print(solution.canThreePartsEqualSum([1, -1, 1, -1]))
+    # print(solution.wordBreak("a", ['b']))
+    # link = solution.createLinkList([1, 2, 3, 4])
+    # solution.reorderList(link)
+    # solution.printListNode(link)
+    # cache = LRUCache(2)
+    # cache.put(1, 1)
+    # cache.put(2, 2)
+    # print(cache.get(1))
+    # cache.put(3, 3)
+    # print(cache.get(2))
+    # cache.put(4, 4)
+    # print(cache.get(1))
+    # print(cache.get(3))
+    # print(cache.get(4))
+    # solution.printListNode(solution.insertionSortList(solution.createLinkList([4,19,14,5,-3,1,8,5,11,15])))
+    solution.printListNode(solution.sortList(solution.createLinkList([4, 19, 14, 5, -3, 1, 8, 5, 11, 15])))
