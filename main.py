@@ -64,4 +64,14 @@ if __name__ == '__main__':
     # print(cache.get(3))
     # print(cache.get(4))
     # solution.printListNode(solution.insertionSortList(solution.createLinkList([4,19,14,5,-3,1,8,5,11,15])))
-    solution.printListNode(solution.sortList(solution.createLinkList([4, 19, 14, 5, -3, 1, 8, 5, 11, 15])))
+    # solution.printListNode(solution.sortList(solution.createLinkList([4, 19, 14, 5, -3, 1, 8, 5, 11, 15])))
+    # print(solution.maxAreaOfIsland([[0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+    #                                 [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+    #                                 [0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    #                                 [0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0],
+    #                                 [0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+    #                                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+    #                                 [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
+    #                                 [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]]))
+    # print(solution.maxPathSum(solution.createBinaryTree([5, 4, 8, 11, None, 13, 4, 7, 2, None, None, None, 1])))
+    print(solution.candy([1, 2, 3, 4, 2, 1, 2, 2, 3, 0, 1, 3, 4, 5, 100]))

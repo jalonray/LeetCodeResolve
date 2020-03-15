@@ -3227,6 +3227,101 @@ class Solution:
     def maxPoints(self, points: List[List[int]]) -> int:
         """https://leetcode-cn.com/problems/max-points-on-a-line/"""
 
+        def K(i, j):
+            return float('Inf') if i[1] - j[1] == 0 else (i[0] - j[0]) / (i[1] - j[1])
+
+        if len(points) <= 2:
+            return len(points)
+
+        maxans = 0
+        for i in points:
+            same = sum(1 for j in points if j == i)
+            hashmap = collections.Counter([K(i, j) for j in points if j != i])
+            tempmax = hashmap.most_common(1)[0][1] if hashmap else 0
+            maxans = max(same + tempmax, maxans)
+
+        return maxans
+
+    def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
+        """https://leetcode-cn.com/problems/max-area-of-island/"""
+
+        def count(m: List[List[int]], x: int, y: int) -> int:
+            if x < 0 or x >= len(m) or y < 0 or y >= len(m[0]) or m[x][y] == 0:
+                return 0
+            m[x][y] = 0
+            return 1 + count(m, x - 1, y) + count(m, x + 1, y) + count(m, x, y - 1) + count(m, x, y + 1)
+
+        if not grid:
+            return 0
+        ans = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == 1:
+                    ans = max(ans, count(grid, i, j))
+        return ans
+
+    def maxPathSum(self, root: TreeNode) -> int:
+        """https://leetcode-cn.com/problems/binary-tree-maximum-path-sum/"""
+
+        self.ans = float('-inf')
+
+        def dfs(node: TreeNode, s) -> int:
+            if not node:
+                return 0
+            if not node.left and not node.right:
+                s.ans = max(s.ans, node.val)
+                return node.val
+            left = 0
+            right = 0
+            if node.left:
+                left = dfs(node.left, s)
+                s.ans = max(s.ans, left, left + node.val)
+            if node.right:
+                right = dfs(node.right, s)
+                s.ans = max(s.ans, right, right + node.val)
+            cur = left + right + node.val
+            s.ans = max(s.ans, cur, node.val)
+            return max(left + node.val, right + node.val, node.val)
+
+        dfs(root, self)
+        return self.ans
+
+    def candy(self, ratings: List[int]) -> int:
+        """https://leetcode-cn.com/problems/candy/"""
+        if not ratings:
+            return 0
+        ans = 0
+        last = 0
+        i = -1
+        while i < len(ratings) - 1:
+            i += 1
+            item = ratings[i]
+            if i == 0:
+                ans += 1
+                last = 1
+                continue
+            if item == ratings[i - 1]:
+                ans += 1
+                last = 1
+                continue
+            elif item > ratings[i - 1]:
+                ans += last + 1
+                last += 1
+            else:
+                start = i - 1
+                while i < len(ratings) and ratings[i] < ratings[i - 1]:
+                    i += 1
+                end = i
+                i -= 1
+                if last >= end - start:
+                    start += 1
+                else:
+                    ans -= last
+                ans += int((1 + (end - start)) * (end - start) / 2)
+                last = 1
+        return ans
+
+
 
 
 
