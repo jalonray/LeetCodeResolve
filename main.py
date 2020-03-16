@@ -74,4 +74,5 @@ if __name__ == '__main__':
     #                                 [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0],
     #                                 [0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0]]))
     # print(solution.maxPathSum(solution.createBinaryTree([5, 4, 8, 11, None, 13, 4, 7, 2, None, None, None, 1])))
-    print(solution.candy([1, 2, 3, 4, 2, 1, 2, 2, 3, 0, 1, 3, 4, 5, 100]))
+    # print(solution.candy([1, 2, 3, 4, 2, 1, 2, 2, 3, 0, 1, 3, 4, 5, 100]))
+    print(solution.compressString("aabcccccaa"))

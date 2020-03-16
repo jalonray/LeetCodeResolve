@@ -3321,6 +3321,25 @@ class Solution:
                 last = 1
         return ans
 
+    def compressString(self, S: str) -> str:
+        """https://leetcode-cn.com/problems/compress-string-lcci/"""
+        if not S:
+            return S
+        ans = ""
+        count = 0
+        for i in range(len(S)):
+            if count == 0:
+                ans += S[i]
+                count += 1
+            elif S[i] == S[i - 1]:
+                count += 1
+            else:
+                ans += str(count) + S[i]
+                count = 1
+        ans += str(count)
+        return ans if len(ans) < len(S) else S
+
+
 
 
 
